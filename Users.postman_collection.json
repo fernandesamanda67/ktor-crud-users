@@ -1,0 +1,127 @@
+{
+	"info": {
+		"_postman_id": "ea2f5149-0993-454b-9410-ce5f03019bcf",
+		"name": "Users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Jose\",\n    \"email\": \"jose@teste.com\",\n    \"cpf\": \"50585388067\",\n    \"birthday\": \"11.08.1987\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:8080/users",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				},
+				"description": "List all users"
+			},
+			"response": []
+		},
+		{
+			"name": "List all users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://0.0.0.0:8080/users?name=Jose",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Jose"
+						}
+					]
+				},
+				"description": "List all users"
+			},
+			"response": []
+		},
+		{
+			"name": "Get user by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://0.0.0.0:8080/users/ac0563a9-960f-47d4-860f-e8dd1ebef06e",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"ac0563a9-960f-47d4-860f-e8dd1ebef06e"
+					]
+				},
+				"description": "Get user by id"
+			},
+			"response": []
+		},
+		{
+			"name": "Update user",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Jose da Silva\",\n    \"email\": \"jose@teste.com\",\n    \"cpf\": \"50585388067\",\n    \"birthday\": \"11.08.1987\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:8080/users/8cd8faf8-d6f7-487d-9440-21ba5d00f956",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"8cd8faf8-d6f7-487d-9440-21ba5d00f956"
+					]
+				},
+				"description": "Update user"
+			},
+			"response": []
+		}
+	]
+}

@@ -1,11 +1,15 @@
 version: "3"
 services:
   web:
+    image: ktor-crud-users
+    container_name: ktor-crud-users
     build: .
     ports:
       - "8080:8080"
     depends_on:
       - app_db
+    networks:
+      - my_network
   app_db:
     image: postgres
     restart: always
@@ -18,5 +22,10 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
+    networks:
+      - my_network
 volumes:
   pgdata:
+networks:
+  my_network:
+    driver: bridge

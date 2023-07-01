@@ -1,10 +1,10 @@
 FROM gradle:7-jdk11 AS build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
-RUN gradle installDist
+RUN gradle buildFatJar --no-daemon
 
-FROM openjdk:11
+FROM eclipse-temurin:17
 EXPOSE 8080:8080
 RUN mkdir /app
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/ktor-crud-users.jar
-ENTRYPOINT ["java","-jar","/app/ktor-crud-users.jar"]
+COPY --from=build /home/gradle/src/build/libs/com.example.ktor-crud-users-all.jar /app/com.example.ktor-crud-users-all.jar
+ENTRYPOINT ["java","-jar","/app/com.example.ktor-crud-users-all.jar"]

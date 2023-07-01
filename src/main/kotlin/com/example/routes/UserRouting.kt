@@ -12,6 +12,7 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 import io.ktor.server.routing.route
+import io.ktor.server.util.getOrFail
 import org.koin.ktor.ext.inject
 
 fun Route.userRouting() {
@@ -36,7 +37,7 @@ fun Route.userRouting() {
             call.respond(HttpStatusCode.Created)
         }
         put("/{id}") {
-            val userId = call.parameters["id"]!!
+            val userId = call.parameters.getOrFail<Int>("id").toString()
             val values = call.receive<UpdateUserDTO>()
             userService.update(userId, values)
             call.respond(HttpStatusCode.NoContent)

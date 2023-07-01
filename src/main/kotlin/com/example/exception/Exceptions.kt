@@ -17,4 +17,6 @@ class CpfAlreadyExists(message: String) : BaseException(message, HttpStatusCode.
 
 class UserCreateException(message: String) : BaseException(message, HttpStatusCode.InternalServerError)
 
+class UserUpdateException(message: String) : BaseException(message, HttpStatusCode.InternalServerError)
+
 class InvalidCpf(message: String) : BaseException(message, HttpStatusCode.InternalServerError)

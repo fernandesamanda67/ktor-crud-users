@@ -3,6 +3,7 @@ package com.example.config.server
 import com.example.config.database.initDB
 import com.example.config.dependencyinjection.repositoryModules
 import com.example.config.dependencyinjection.serviceModules
+import com.example.config.dependencyinjection.utilModules
 import com.example.config.exception.handler
 import com.example.config.routes.configureRouting
 import io.ktor.serialization.kotlinx.json.json
@@ -39,8 +40,8 @@ fun Application.installContentNegotiator() {
 @ExperimentalSerializationApi
 fun Application.installDependencyInjection() = install(Koin) {
     modules(
-        // utilsModule(),
         repositoryModules(),
-        serviceModules()
+        serviceModules(),
+        utilModules()
     )
 }

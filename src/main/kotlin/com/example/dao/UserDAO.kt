@@ -1,9 +1,10 @@
 package com.example.dao
 
 import com.example.exception.UserCreateException
+import com.example.exception.UserUpdateException
 import com.example.service.CreateUserDTO
 import com.example.service.UpdateUserDTO
-import com.example.util.parseToLocalDateType
+import com.example.util.Util
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
@@ -12,6 +13,8 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 interface UserDAO {
@@ -23,14 +26,16 @@ interface UserDAO {
     fun getByCpf(cpf: String): User?
 }
 
-class UserDAOImpl : UserDAO {
+class UserDAOImpl(private val util: Util) : UserDAO {
 
     private fun resultRowToUser(row: ResultRow) = User(
         id = row[Users.id],
         name = row[Users.name],
         email = row[Users.email],
         cpf = row[Users.cpf],
-        birthday = row[Users.birthday]
+        birthday = row[Users.birthday],
+        createdDate = row[Users.createdDate],
+        lastModificationDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
     )
 
     override fun getAll(name: String?): List<User> {
@@ -50,7 +55,9 @@ class UserDAOImpl : UserDAO {
                     it[name] = user.name
                     it[email] = user.email
                     it[cpf] = user.cpf
-                    it[birthday] = parseToLocalDateType(user.birthday)
+                    it[birthday] = util.parseToLocalDateType(user.birthday)
+                    it[createdDate] = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
+                    it[lastModificationDate] = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
                 }
             }
         } catch (e: ExposedSQLException) {
@@ -73,11 +80,12 @@ class UserDAOImpl : UserDAO {
                     it[name] = values.name
                     it[email] = values.email
                     it[cpf] = values.cpf
-                    it[birthday] = parseToLocalDateType(values.birthday)
+                    it[birthday] = util.parseToLocalDateType(values.birthday)
+                    it[lastModificationDate] = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
                 }
             }
         } catch (e: ExposedSQLException) {
-            throw UserCreateException("Error creating user")
+            throw UserUpdateException("Error updating user")
         }
     }
 

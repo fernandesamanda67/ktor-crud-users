@@ -6,10 +6,9 @@ import com.example.dao.toResponseDTO
 import com.example.exception.CpfAlreadyExists
 import com.example.exception.EmailAlreadyExists
 import com.example.exception.InvalidCpf
+import com.example.exception.MinimumAge
 import com.example.exception.UserNotFound
-import com.example.util.isValidCpf
-import com.example.util.parseToLocalDateType
-import com.example.util.verifyAge
+import com.example.util.Util
 import kotlinx.serialization.ExperimentalSerializationApi
 import java.util.UUID
 
@@ -21,14 +20,14 @@ interface UserService {
 }
 
 @ExperimentalSerializationApi
-class UserServiceImpl(private val repository: UserDAO) : UserService {
+class UserServiceImpl(private val repository: UserDAO, private val util: Util) : UserService {
     override fun getAllUsers(name: String?): List<User> {
         return repository.getAll(name)
     }
 
     override fun create(user: CreateUserDTO) {
-        if (!isValidCpf(user.cpf)) throw InvalidCpf("CPF Invalid")
-        verifyAge(parseToLocalDateType(user.birthday))
+        if (!util.isValidCpf(user.cpf)) throw InvalidCpf("CPF Invalid")
+        if (!util.isValidAge(util.parseToLocalDateType(user.birthday))) throw MinimumAge("Only over 18 years are allowed")
         verifyEmailAlreadyExists(user.email, "")
         verifyCpfAlreadyExists(user.cpf, "")
         return repository.create(user)
@@ -40,8 +39,8 @@ class UserServiceImpl(private val repository: UserDAO) : UserService {
     }
 
     override fun update(id: String, values: UpdateUserDTO) {
-        if (!isValidCpf(values.cpf)) throw InvalidCpf("CPF Invalid")
-        verifyAge(parseToLocalDateType(values.birthday))
+        if (!util.isValidCpf(values.cpf)) throw InvalidCpf("CPF Invalid")
+        if (!util.isValidAge(util.parseToLocalDateType(values.birthday))) throw MinimumAge("Only over 18 years are allowed")
         verifyEmailAlreadyExists(values.email, id)
         verifyCpfAlreadyExists(values.cpf, id)
         return repository.update(id, values)

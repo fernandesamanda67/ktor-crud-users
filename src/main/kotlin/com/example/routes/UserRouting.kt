@@ -27,7 +27,7 @@ fun Route.userRouting() {
             call.respond(userService.getAllUsers(name))
         }
         get("/{id}") {
-            val userId = call.parameters["id"]!!
+            val userId = call.parameters.getOrFail<String>("id").toString()
             val user = userService.getByUUid(userId)
             call.respond(user)
         }
@@ -37,11 +37,10 @@ fun Route.userRouting() {
             call.respond(HttpStatusCode.Created)
         }
         put("/{id}") {
-            val userId = call.parameters.getOrFail<Int>("id").toString()
+            val userId = call.parameters.getOrFail<String>("id").toString()
             val values = call.receive<UpdateUserDTO>()
             userService.update(userId, values)
             call.respond(HttpStatusCode.NoContent)
         }
-        //     val id = call.parameters.getOrFail<Int>("id").toInt()
     }
 }
